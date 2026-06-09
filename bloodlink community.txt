@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BloodLink Community</title>
+  <style>
+    :root{
+      --bg:#fff7f8;
+      --card:#ffffff;
+      --text:#1f1f1f;
+      --muted:#6c6c6c;
+      --primary:#c91f37;
+      --primary2:#981327;
+      --line:#f1d7dc;
+      --good:#168a5f;
+      --warn:#d18b00;
+      --shadow:0 16px 40px rgba(201,31,55,.10);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg,var(--bg),#fff);
+      color:var(--text);
+    }
+    .page{
+      max-width:1280px;
+      margin:0 auto;
+      padding:18px;
+    }
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:14px 0 18px;
+      flex-wrap:wrap;
+    }
+    .brand h1{
+      margin:0;
+      font-size:clamp(1.8rem,4vw,3rem);
+      color:var(--primary2);
+    }
+    .brand p{
+      margin:6px 0 0;
+      color:var(--muted);
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .btn{
+      border:0;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .btn.primary{background:var(--primary);color:#fff}
+    .btn.ghost{
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--primary2);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:280px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .sidebar,.main,.section,.card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .sidebar{
+      padding:16px;
+      position:sticky;
+      top:16px;
+    }
+    .menu{
+      display:grid;
+      gap:8px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#fff;
+      cursor:pointer;
+      font-weight:700;
+      color:var(--primary2);
+    }
+    .tab.active{
+      background:var(--primary);
+      color:#fff;
+      border-color:transparent;
+    }
+    .main{
+      padding:16px;
+      display:grid;
+      gap:16px;
+    }
+    .hero{
+      padding:18px;
+      background:linear-gradient(135deg,#fff,#fff2f4);
+    }
+    .hero h2{
+      margin:0 0 8px;
+      font-size:1.5rem;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.6;
+    }
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-top:16px;
+    }
+    .stat{
+      padding:14px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#fff;
+    }
+    .stat strong{
+      display:block;
+      font-size:1.25rem;
+      color:var(--primary2);
+    }
+    .stat span{
+      color:var(--muted);
+      font-size:.9rem;
+    }
+    .panel{
+      display:none;
+    }
+    .panel.active{
+      display:grid;
+      gap:16px;
+    }
+    .section{
+      padding:16px;
+    }
+    .section h3{
+      margin:0 0 12px;
+      font-size:1.1rem;
+      color:var(--primary2);
+    }
+    form{
+      display:grid;
+      gap:12px;
+    }
+    .row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    label{
+      font-size:.9rem;
+      font-weight:700;
+    }
+    input,select,textarea{
+      width:100%;
+      margin-top:6px;
+      padding:12px 14px;
+      border:1px solid #d9c7cb;
+      border-radius:14px;
+      background:#fff;
+      outline:none;
+    }
+    textarea{
+      min-height:90px;
+      resize:vertical;
+    }
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .toolbar input,.toolbar select{
+      min-width:180px;
+    }
+    .list{
+      display:grid;
+      gap:12px;
+    }
+    .item{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      background:#fff;
+    }
+    .item-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:start;
+    }
+    .item h4{
+      margin:0 0 6px;
+    }
+    .meta{
+      color:var(--muted);
+      font-size:.92rem;
+      line-height:1.5;
+    }
+    .chips{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .chip{
+      border:1px solid var(--line);
+      background:#fff7f8;
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:.8rem;
+      color:var(--primary2);
+    }
+    .ok{
+      background:var(--good);
+      color:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      border:0;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .danger{background:var(--warn)}
+    .empty{
+      padding:18px;
+      text-align:center;
+      color:var(--muted);
+      border:1px dashed var(--line);
+      border-radius:16px;
+    }
+    .small{
+      color:var(--muted);
+      font-size:.9rem;
+      line-height:1.55;
+    }
+    @media (max-width: 980px){
+      .grid,.stats,.row{
+        grid-template-columns:1fr 1fr;
+      }
+      .sidebar{
+        position:static;
+      }
+    }
+    @media (max-width: 720px){
+      .grid,.stats,.row{
+        grid-template-columns:1fr;
+      }
+      .item-top{
+        flex-direction:column;
+      }
+      .toolbar{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+      }
+      .toolbar input,.toolbar select{
+        min-width:0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <div class="brand">
+        <h1>BloodLink Community</h1>
+        <p>Single-page blood donation dashboard with Patient, Donor, and Admin sections.</p>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="emergencyBtn">Emergency Call</button>
+        <button class="btn ghost" id="resetBtn">Reset Demo</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <aside class="sidebar">
+        <div class="menu">
+          <button class="tab active" data-tab="home">Overview</button>
+          <button class="tab" data-tab="patient">Patient</button>
+          <button class="tab" data-tab="donor">Donor</button>
+          <button class="tab" data-tab="admin">Admin</button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="hero section">
+          <h2>Save lives faster with a simple community blood tracker.</h2>
+          <p>This project is made realistic for web development: patients create blood requests, donors register and respond, and admin manages approvals and stock. The whole app works as a clean frontend demo using localStorage.</p>
+          <div class="stats">
+            <div class="stat"><strong id="totalDonors">0</strong><span>Donors</span></div>
+            <div class="stat"><strong id="totalRequests">0</strong><span>Requests</span></div>
+            <div class="stat"><strong id="totalMatches">0</strong><span>Matches</span></div>
+            <div class="stat"><strong id="totalUnits">0</strong><span>Units needed</span></div>
+          </div>
+        </section>
+
+        <section class="panel active" id="homePanel">
+          <div class="section">
+            <h3>How it works</h3>
+            <p class="small">1. Patient creates a blood request. 2. System finds matching donors by blood group. 3. Donor accepts the request. 4. Admin tracks status and manages stock. This follows a realistic blood bank workflow used in donor-patient-admin systems.</p>
+          </div>
+        </section>
+
+        <section class="panel" id="patientPanel">
+          <div class="section">
+            <h3>Create Blood Request</h3>
+            <form id="requestForm">
+              <div class="row">
+                <label>Patient Name<input required name="patientName" placeholder="Enter patient name"></label>
+                <label>Blood Group<select required name="bloodGroup"><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></label>
+              </div>
+              <div class="row">
+                <label>Urgency<select name="urgency"><option>Critical</option><option>High</option><option>Normal</option></select></label>
+                <label>Units Required<input required type="number" min="1" max="10" name="units" value="1"></label>
+              </div>
+              <div class="row">
+                <label>Hospital<input required name="hospital" placeholder="Hospital name"></label>
+                <label>Location<input required name="location" placeholder="City / area"></label>
+              </div>
+              <label>Reason<textarea name="reason" placeholder="Optional details"></textarea></label>
+              <button class="btn primary" type="submit">Create Request</button>
+            </form>
+          </div>
+          <div class="section">
+            <h3>Active Requests</h3>
+            <div id="requestList" class="list"></div>
+          </div>
+        </section>
+
+        <section class="panel" id="donorPanel">
+          <div class="section">
+            <h3>Donor Registration</h3>
+            <form id="donorForm">
+              <div class="row">
+                <label>Name<input required name="name" placeholder="Full name"></label>
+                <label>Age<input required type="number" min="18" max="70" name="age"></label>
+              </div>
+              <div class="row">
+                <label>Blood Group<select required name="bloodGroup"><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></label>
+                <label>Phone<input required name="phone" placeholder="Phone number"></label>
+              </div>
+              <div class="row">
+                <label>Email<input required type="email" name="email" placeholder="Email address"></label>
+                <label>Location<input required name="location" placeholder="Area / city"></label>
+              </div>
+              <div class="row">
+                <label>Availability<select name="availability"><option>Anytime</option><option>Weekends</option><option>Evenings</option><option>After 7 PM</option></select></label>
+                <label>Last Donation<input type="date" name="lastDonation"></label>
+              </div>
+              <label>Notes<textarea name="notes" placeholder="Optional notes"></textarea></label>
+              <button class="btn primary" type="submit">Save Donor</button>
+            </form>
+          </div>
+          <div class="section">
+            <h3>Search Donors</h3>
+            <div class="toolbar">
+              <input id="searchDonor" placeholder="Search name, blood group, or location">
+              <select id="bloodFilter"><option value="All">All groups</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select>
+            </div>
+            <div id="donorList" class="list" style="margin-top:12px"></div>
+          </div>
+        </section>
+
+        <section class="panel" id="adminPanel">
+          <div class="section">
+            <h3>Admin Dashboard</h3>
+            <p class="small">Manage donors, requests, and stock status from one view. In a real version, this section can connect to a backend and show approval queues, notifications, and reports.</p>
+          </div>
+          <div class="section">
+            <h3>Quick Controls</h3>
+            <div class="actions">
+              <button class="btn primary" id="seedBtn">Load Sample Data</button>
+              <button class="btn ghost" id="approveAllBtn">Mark All Requests Matched</button>
+              <button class="btn ghost" id="clearHistoryBtn">Clear Closed Items</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const store = { donors: 'bloodlink_donors', requests: 'bloodlink_requests' };
+    const read = (k,f)=>JSON.parse(localStorage.getItem(k)||JSON.stringify(f));
+    const write = (k,v)=>localStorage.setItem(k,JSON.stringify(v));
+    let donors = read(store.donors,[{name:'Rahul Kumar',age:'26',bloodGroup:'O+',phone:'9876543210',email:'rahul@example.com',location:'Madhapur',availability:'Evenings',lastDonation:'2026-03-12',notes:'Ready for emergencies',createdAt:Date.now()-5000000}]);
+    let requests = read(store.requests,[{patientName:'Sita Devi',bloodGroup:'O+',urgency:'Critical',units:'2',hospital:'City Care Hospital',location:'Miyapur',reason:'Accident emergency',status:'Open',createdAt:Date.now()-4000000}]);
+
+    const tabs = document.querySelectorAll('.tab');
+    const panels = {
+      home:document.getElementById('homePanel'),
+      patient:document.getElementById('patientPanel'),
+      donor:document.getElementById('donorPanel'),
+      admin:document.getElementById('adminPanel')
+    };
+
+    const donorForm = document.getElementById('donorForm');
+    const requestForm = document.getElementById('requestForm');
+    const donorList = document.getElementById('donorList');
+    const requestList = document.getElementById('requestList');
+    const searchDonor = document.getElementById('searchDonor');
+    const bloodFilter = document.getElementById('bloodFilter');
+
+    const totalDonors = document.getElementById('totalDonors');
+    const totalRequests = document.getElementById('totalRequests');
+    const totalMatches = document.getElementById('totalMatches');
+    const totalUnits = document.getElementById('totalUnits');
+
+    const save = ()=>{
+      write(store.donors,donors);
+      write(store.requests,requests);
+    };
+
+    const renderStats = ()=>{
+      totalDonors.textContent = donors.length;
+      totalRequests.textContent = requests.length;
+      totalMatches.textContent = requests.reduce((a,r)=>a+donors.filter(d=>d.bloodGroup===r.bloodGroup).length,0);
+      totalUnits.textContent = requests.reduce((a,r)=>a+Number(r.units||0),0);
+    };
+
+    const donorItem = d => `
+      <article class="item">
+        <div class="item-top">
+          <div>
+            <h4>${d.name} <span style="color:var(--primary)">(${d.bloodGroup})</span></h4>
+            <div class="meta">
+              Age: ${d.age} • ${d.location}<br>
+              Phone: ${d.phone} • Email: ${d.email}<br>
+              Availability: ${d.availability} • Last Donation: ${d.lastDonation || 'N/A'}
+            </div>
+          </div>
+          <button class="ok" onclick="alert('Donor selected: ${d.name}')">Contact</button>
+        </div>
+        <div class="chips">
+          <span class="chip">${d.bloodGroup}</span>
+          <span class="chip">${d.location}</span>
+          <span class="chip">${d.availability}</span>
+        </div>
+        ${d.notes ? `<div class="small" style="margin-top:10px">${d.notes}</div>` : ''}
+      </article>
+    `;
+
+    const requestItem = r => {
+      const matches = donors.filter(d=>d.bloodGroup===r.bloodGroup).length;
+      return `
+        <article class="item">
+          <div class="item-top">
+            <div>
+              <h4>${r.patientName} needs ${r.bloodGroup} • ${r.units} unit(s)</h4>
+              <div class="meta">
+                Hospital: ${r.hospital}<br>
+                Location: ${r.location} • Urgency: ${r.urgency}<br>
+                Reason: ${r.reason || 'Not provided'}
+              </div>
+            </div>
+            <button class="ok ${matches ? '' : 'danger'}" onclick="alert('${matches ? matches+' matching donor(s) found' : 'No matching donor found'}')">
+              ${matches ? `Match (${matches})` : 'No Match'}
+            </button>
+          </div>
+          <div class="chips">
+            <span class="chip">${r.bloodGroup}</span>
+            <span class="chip">${r.urgency}</span>
+            <span class="chip">${r.status}</span>
+          </div>
+        </article>
+      `;
+    };
+
+    const renderDonors = ()=>{
+      const q = searchDonor.value.toLowerCase().trim();
+      let items = donors.filter(d=>
+        `${d.name} ${d.bloodGroup} ${d.location}`.toLowerCase().includes(q) &&
+        (bloodFilter.value === 'All' || d.bloodGroup === bloodFilter.value)
+      );
+      donorList.innerHTML = items.length ? items.map(donorItem).join('') : '<div class="empty">No donors found.</div>';
+    };
+
+    const renderRequests = ()=>{
+      requestList.innerHTML = requests.length ? requests.map(requestItem).join('') : '<div class="empty">No active requests.</div>';
+    };
+
+    const renderAll = ()=>{
+      save();
+      renderStats();
+      renderDonors();
+      renderRequests();
+    };
+
+    tabs.forEach(t=>t.onclick=()=>{
+      tabs.forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      Object.values(panels).forEach(p=>p.classList.remove('active'));
+      panels[t.dataset.tab].classList.add('active');
+    });
+
+    donorForm.onsubmit = e => {
+      e.preventDefault();
+      const d = Object.fromEntries(new FormData(donorForm).entries());
+      d.createdAt = Date.now();
+      donors.unshift(d);
+      donorForm.reset();
+      renderAll();
+      alert('Donor saved successfully');
+    };
+
+    requestForm.onsubmit = e => {
+      e.preventDefault();
+      const r = Object.fromEntries(new FormData(requestForm).entries());
+      r.status='Open';
+      r.createdAt = Date.now();
+      requests.unshift(r);
+      requestForm.reset();
+      renderAll();
+      alert('Request created successfully');
+    };
+
+    searchDonor.oninput = renderDonors;
+    bloodFilter.onchange = renderDonors;
+
+    document.getElementById('resetBtn').onclick = ()=>{
+      localStorage.removeItem(store.donors);
+      localStorage.removeItem(store.requests);
+      location.reload();
+    };
+
+    document.getElementById('emergencyBtn').onclick = ()=>{
+      alert('Emergency contact: 108 / nearest blood bank');
+    };
+
+    document.getElementById('seedBtn').onclick = ()=>{
+      donors = [
+        {name:'Rahul Kumar',age:'26',bloodGroup:'O+',phone:'9876543210',email:'rahul@example.com',location:'Madhapur',availability:'Evenings',lastDonation:'2026-03-12',notes:'Ready for emergencies',createdAt:Date.now()-5000000},
+        {name:'Ananya Reddy',age:'24',bloodGroup:'A+',phone:'9123456780',email:'ananya@example.com',location:'Kukatpally',availability:'Weekends',lastDonation:'2026-02-20',notes:'Can travel nearby',createdAt:Date.now()-3000000},
+        {name:'Sameer Khan',age:'31',bloodGroup:'B+',phone:'9012345678',email:'sameer@example.com',location:'Gachibowli',availability:'Anytime',lastDonation:'2025-12-15',notes:'Available for camp',createdAt:Date.now()-1000000}
+      ];
+      requests = [
+        {patientName:'Sita Devi',bloodGroup:'O+',urgency:'Critical',units:'2',hospital:'City Care Hospital',location:'Miyapur',reason:'Accident emergency',status:'Open',createdAt:Date.now()-4000000},
+        {patientName:'Arjun Verma',bloodGroup:'A+',urgency:'High',units:'1',hospital:'Apollo Clinic',location:'Hitech City',reason:'Surgery support',status:'Open',createdAt:Date.now()-2000000}
+      ];
+      renderAll();
+    };
+
+    document.getElementById('approveAllBtn').onclick = ()=>{
+      requests = requests.map(r=>({...r,status:'Matched'}));
+      renderAll();
+    };
+
+    document.getElementById('clearHistoryBtn').onclick = ()=>{
+      requests = requests.filter(r=>r.status === 'Open');
+      renderAll();
+    };
+
+    renderAll();
+  </script>
+</body>
+</html>
